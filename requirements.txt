@@ -1,0 +1,8 @@
+mlflow
+pytorch-lightning
+git+https://github.com/rwightman/pytorch-image-models.git
+transformers
+gensim==3.8.3
+texthero
+efficientnet_pytorch
+sentencepiece

@@ -1,0 +1,6 @@
+name: "first try"
+exp: exp002
+seed: 77
+
+title_tfidf_n_components: 50
+title_tfidf_reducer: PCA

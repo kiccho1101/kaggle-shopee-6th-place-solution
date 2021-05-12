@@ -1,0 +1,39 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+jupyter = "*"
+pysen = {extras = ["lint"], version = "==0.9.1"}
+
+[packages]
+torch = "*"
+torchvision = "*"
+timm = "*"
+scikit-learn = "*"
+pandas = "*"
+numpy = "*"
+tqdm = "*"
+matplotlib = "*"
+psutil = "*"
+albumentations = "*"
+kaggle = "*"
+pytorch-lightning = "*"
+mlflow = "==1.14.1"
+seaborn = "*"
+opencv-python = "*"
+transformers = "*"
+fastai = {extras = ["dev"], version = "*"}
+slack-notifications = "*"
+slackweb = "*"
+texthero = "*"
+gensim = "==3.8.3"
+pycld2 = "*"
+efficientnet_pytorch = "*"
+pytorch-metric-learning = "*"
+
+[requires]
+python_version = "3.8"

@@ -1,0 +1,149 @@
+name: "vit_base_patch16_384 ITN4"
+exp: exp402
+seed: 77
+
+title_tfidf_n_components: 50
+title_tfidf_reducer: PCA
+
+cv_config:
+  name: GroupKFold
+  target: label_group
+  n_splits: 5
+  fold_col: kurupical_fold
+
+train_config:
+  resume_from_exp: exp402
+  train_batch_size: 16
+  valid_batch_size: 32
+  epochs: 10
+  num_workers: 2
+
+inference_config:
+  threshold: 60
+  model_checkpoints: []
+  thresholds:
+    - 60
+  epoch_configs:
+    - dataloader_exp: exp300
+      model_checkpoints:
+        - exp186_-1_epoch09.ckpt
+  concat_configs:
+    - weights:
+        - 50
+      idxs:
+        - 0
+  weights: []
+
+
+dataset_config:
+  img_size: 384
+
+model_config:
+  model_name: ShopeeImgTextNet4
+  model_arch: vit_base_patch16_384
+  pretrained: True
+  channel_size: 512
+  dropout: 0.2
+  bert_model_arch: cahya/distilbert-base-indonesian
+  img_checkpoint: exp392
+  txt_checkpoint: exp301
+  w_concat: 1
+  w_img: 1
+  w_txt: 1
+
+optimizer_config:
+  name: Adam
+  params:
+    cnn_lr: 0.0001
+    bert_lr: 0.00005
+    fc_lr: 0.0005
+    lr: 0.0005
+
+scheduler_config:
+  name: CosineAnnealingWarmRestarts
+  params:
+    T_0: 10
+    T_mult: 1
+    eta_min: 0.00005
+    last_epoch: -1
+
+met_config:
+  name: ArcMarginProduct
+  params:
+    s: 50.0
+    m: 0.5
+    easy_margin: False
+    smoothing: 0.0
+
+transform_config:
+  train:
+    - name: Resize
+      args:
+        height: 384
+        width: 384
+    - name: HorizontalFlip
+      args:
+        p: 0.5
+    - name: ShiftScaleRotate
+      args:
+        p: 0.5
+    - name: HueSaturationValue
+      args:
+        hue_shift_limit: 0.2
+        sat_shift_limit: 0.2
+        val_shift_limit: 0.2
+        p: 0.5
+    - name: Normalize
+      args:
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+        max_pixel_value:
+          - 255.0
+        p: 1.0
+    - name: CoarseDropout
+      args:
+        p: 0.5
+
+  valid:
+    - name: Resize
+      args:
+        height: 384
+        width: 384
+    - name: Normalize
+      args:
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+        max_pixel_value:
+          - 255.0
+        p: 1.0
+
+  inference:
+    - name: Resize
+      args:
+        height: 384
+        width: 384
+    - name: Normalize
+      args:
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+        max_pixel_value:
+          - 255.0
+        p: 1.0

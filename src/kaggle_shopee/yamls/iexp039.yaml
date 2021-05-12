@@ -1,0 +1,186 @@
+name: "exp200+205+207 avg_voting min_indices=2"
+exp: iexp037
+seed: 77
+
+title_tfidf_n_components: 50
+title_tfidf_reducer: PCA
+
+cv_config:
+  name: GroupKFold
+  target: label_group
+  n_splits: 5
+
+train_config:
+  resume_from_exp: eexp004
+  train_batch_size: 16
+  valid_batch_size: 32
+  epochs: 10
+  num_workers: 2
+
+inference_config:
+  threshold: 60
+  ensemble_method: avg_voting
+  min_voting_count: 2
+  thresholds:
+    - 40
+    - 40
+    - 40
+    - 40
+    - 40
+  model_checkpoints:
+    - exp017
+    - exp055
+  epoch_configs:
+    - dataloader_exp: exp200
+      model_checkpoints:
+        - exp200
+        - exp209
+    - dataloader_exp: exp205
+      model_checkpoints:
+        - exp205
+        - exp210
+    - dataloader_exp: exp207
+      model_checkpoints:
+        - exp207
+  concat_configs:
+    - weights:
+        - 50
+      idxs:
+        - 0
+      min_indices: 2
+    - weights:
+        - 50
+      idxs:
+        - 1
+      min_indices: 2
+    - weights:
+        - 50
+      idxs:
+        - 2
+      min_indices: 2
+    - weights:
+        - 50
+      idxs:
+        - 3
+      min_indices: 2
+    - weights:
+        - 50
+      idxs:
+        - 4
+      min_indices: 2
+
+
+dataset_config:
+  img_size: 512
+  text_col: title
+  padding: True
+  truncation: True
+  max_length: 128
+
+model_config:
+  model_name: ShopeeTextNet
+  model_arch: efficientnet_b3
+  pretrained: True
+  channel_size: 512
+  dropout: 0.5
+  bert_model_arch: cahya/distilbert-base-indonesian
+  bert_hidden_size: 768
+  stage1_checkpoint: None
+
+optimizer_config:
+  name: Adam
+  params:
+    lr: 0.0001
+    weight_decay: 0.000001
+
+scheduler_config:
+  name: CosineAnnealingWarmRestarts
+  params:
+    T_0: 10
+    T_mult: 1
+    eta_min: 0.000001
+    last_epoch: -1
+
+met_config:
+  name: ArcMarginProduct
+  params:
+    s: 50.0
+    m: 0.5
+    easy_margin: False
+    smoothing: 0.0
+
+mlflow_config:
+  exp_name: i_cv
+
+transform_config:
+  train:
+    - name: Resize
+      args:
+        height: 512
+        width: 512
+    - name: HorizontalFlip
+      args:
+        p: 0.5
+    - name: ShiftScaleRotate
+      args:
+        p: 0.5
+    - name: HueSaturationValue
+      args:
+        hue_shift_limit: 0.2
+        sat_shift_limit: 0.2
+        val_shift_limit: 0.2
+        p: 0.5
+    - name: Normalize
+      args:
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+        max_pixel_value:
+          - 255.0
+        p: 1.0
+    - name: CoarseDropout
+      args:
+        p: 0.5
+
+  valid:
+    - name: Resize
+      args:
+        height: 512
+        width: 512
+    - name: Normalize
+      args:
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+        max_pixel_value:
+          - 255.0
+        p: 1.0
+
+  inference:
+    - name: Resize
+      args:
+        height: 512
+        width: 512
+    - name: Normalize
+      args:
+        mean:
+          - 0.485
+          - 0.456
+          - 0.406
+        std:
+          - 0.229
+          - 0.224
+          - 0.225
+        max_pixel_value:
+          - 255.0
+        p: 1.0

@@ -1,0 +1,133 @@
+name: "eca_nfnet_l1 + distilbert-base-indonesian ITN6 img_bn cnn_lr=3e-4 lr=3e-4 w_img=1 w_txt=1"
+exp: exp444
+seed: 77
+
+title_tfidf_n_components: 50
+title_tfidf_reducer: PCA
+
+cv_config:
+  name: GroupKFold
+  target: label_group
+  n_splits: 5
+  fold_col: kurupical_fold
+
+train_config:
+  resume_from_exp: exp444
+  train_batch_size: 16
+  valid_batch_size: 32
+  epochs: 11
+  num_workers: 2
+
+inference_config:
+  threshold: 60
+  model_checkpoints: []
+  thresholds:
+    - 70
+    - 70
+  epoch_configs:
+    - dataloader_exp: exp423
+      model_checkpoints:
+        - exp423_-1_epoch10.ckpt
+  concat_configs:
+    - weights:
+        - 50
+      idxs:
+        - 0
+      min_indices: 2
+  with_tfidf: False
+  tfidf_threshold: 85
+  tfidf_max_features: 10000
+  ensemble_method: concat_voting
+  weights: []
+  min_voting_count: 1
+
+dataset_config:
+  img_size: 512
+
+model_config:
+  model_name: ShopeeImgTextNet6
+  model_arch: eca_nfnet_l1
+  pretrained: True
+  channel_size: 2048
+  dropout: 0.2
+  bert_model_arch: cahya/distilbert-base-indonesian
+  img_checkpoint: exp443
+  txt_checkpoint: exp301
+  w_concat: 1
+  w_img: 1
+  w_txt: 1
+
+bert_pooling_config:
+  name: hs-mean
+  params:
+    hs_idxs:
+      - -1
+      - -2
+      - -3
+      - -4
+
+optimizer_config:
+  name: Adam
+  params:
+    cnn_lr: 0.0001
+    bert_lr: 0.00005
+    lr: 0.0001
+
+scheduler_config:
+  name: CosineAnnealingWarmRestarts
+  params:
+    T_0: 10
+    T_mult: 1
+    eta_min: 0.000001
+    last_epoch: -1
+
+met_config:
+  name: ArcMarginProduct
+  params:
+    s: 50.0
+    m: 0.5
+    easy_margin: False
+    smoothing: 0.0
+
+transform_config:
+  train:
+    - name: Resize
+      args:
+        height: 512
+        width: 512
+    - name: HorizontalFlip
+      args:
+        p: 0.5
+    - name: ShiftScaleRotate
+      args:
+        p: 0.5
+    - name: HueSaturationValue
+      args:
+        hue_shift_limit: 0.2
+        sat_shift_limit: 0.2
+        val_shift_limit: 0.2
+        p: 0.5
+    - name: Normalize
+      args:
+        p: 1.0
+    - name: CoarseDropout
+      args:
+        p: 0.5
+
+  valid:
+    - name: Resize
+      args:
+        height: 512
+        width: 512
+    - name: Normalize
+      args:
+        p: 1.0
+
+  inference:
+    - name: Resize
+      args:
+        height: 512
+        width: 512
+    - name: Normalize
+      args:
+        p: 1.0

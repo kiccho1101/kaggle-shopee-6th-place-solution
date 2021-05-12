@@ -1,0 +1,140 @@
+name: "swin_base_patch4_window12_384 + distilbert-base-indonesian cnn_lr=1e-5 lr=1e-5 bert_lr=1e-5 bs=12 nlp_bn"
+exp: exp414
+seed: 77
+
+title_tfidf_n_components: 50
+title_tfidf_reducer: PCA
+
+cv_config:
+  name: GroupKFold
+  target: label_group
+  n_splits: 5
+  fold_col: kurupical_fold
+
+train_config:
+  resume_from_exp: exp414
+  train_batch_size: 12
+  valid_batch_size: 32
+  epochs: 13
+  num_workers: 2
+
+inference_config:
+  threshold: 60
+  model_checkpoints: []
+  thresholds:
+    - 70
+    - 70
+  epoch_configs:
+    - dataloader_exp: exp383
+      model_checkpoints:
+        - exp383_-1_epoch09.ckpt
+    - dataloader_exp: exp385
+      model_checkpoints:
+        - exp385_-1_epoch09.ckpt
+  concat_configs:
+    - weights:
+        - 50
+      idxs:
+        - 0
+      min_indices: 2
+    - weights:
+        - 50
+      idxs:
+        - 1
+      min_indices: 2
+  with_tfidf: False
+  tfidf_threshold: 85
+  tfidf_max_features: 10000
+  ensemble_method: concat_voting
+  weights: []
+  min_voting_count: 1
+
+dataset_config:
+  img_size: 384
+
+model_config:
+  model_name: ShopeeVitImgTextNet
+  model_arch: swin_base_patch4_window12_384
+  pretrained: True
+  channel_size: 2048
+  dropout: 0.0
+  bert_model_arch: cahya/distilbert-base-indonesian
+  w_concat: 1
+  w_img: 1
+  w_txt: 1
+
+bert_pooling_config:
+  name: hs-mean
+  params:
+    hs_idxs:
+      - -1
+      - -2
+      - -3
+      - -4
+
+optimizer_config:
+  name: Adam
+  params:
+    cnn_lr: 0.00001
+    bert_lr: 0.00001
+    lr: 0.00001
+    fc_lr: 0.00001
+
+scheduler_config:
+  name: CosineAnnealingWarmRestarts
+  params:
+    T_0: 10
+    T_mult: 1
+    eta_min: 0.000001
+    last_epoch: -1
+
+met_config:
+  name: ArcMarginProduct
+  params:
+    s: 50.0
+    m: 0.5
+    easy_margin: False
+    smoothing: 0.0
+
+transform_config:
+  train:
+    - name: Resize
+      args:
+        height: 384
+        width: 384
+    - name: HorizontalFlip
+      args:
+        p: 0.5
+    - name: ShiftScaleRotate
+      args:
+        p: 0.5
+    - name: HueSaturationValue
+      args:
+        hue_shift_limit: 0.2
+        sat_shift_limit: 0.2
+        val_shift_limit: 0.2
+        p: 0.5
+    - name: Normalize
+      args:
+        p: 1.0
+    - name: CoarseDropout
+      args:
+        p: 0.5
+
+  valid:
+    - name: Resize
+      args:
+        height: 384
+        width: 384
+    - name: Normalize
+      args:
+        p: 1.0
+
+  inference:
+    - name: Resize
+      args:
+        height: 384
+        width: 384
+    - name: Normalize
+      args:
+        p: 1.0

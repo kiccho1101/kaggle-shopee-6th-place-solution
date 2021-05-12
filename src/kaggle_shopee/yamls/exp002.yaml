@@ -1,0 +1,11 @@
+name: "arcface explained"
+exp: exp002
+seed: 77
+
+cv_config:
+  name: StratifiedKFold
+  target: label_group
+  n_splits: 5
+
+title_tfidf_n_components: 50
+title_tfidf_reducer: PCA
