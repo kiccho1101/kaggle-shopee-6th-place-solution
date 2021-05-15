@@ -52,8 +52,6 @@ trainer.fit(model, train_dataloader)
 
 last_epoch = config.train_config.epochs - 1
 last_epoch_str = str(last_epoch).zfill(2)
-checkpoint_path = str(
-    config.dir_config.checkpoint_out_dir / f"{args.exp}_-1_epoch{last_epoch_str}.ckpt"
-)
+checkpoint_path = f"{args.exp}_-1_epoch{last_epoch_str}.ckpt"
 print("checkpoint_path", checkpoint_path)
 trainer.save_checkpoint(checkpoint_path)
