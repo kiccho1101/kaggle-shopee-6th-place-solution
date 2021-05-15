@@ -45,6 +45,7 @@ class DirConfig:
     data_dir: Path
     s_data_dir: Path
     checkpoint_dir: Path
+    checkpoint_out_dir: Path
     dataset_dir: Path
     yamls_dir: Path
     train_images_dir: Path
@@ -267,6 +268,7 @@ class ConfigFactory:
         else:
             return root_dir / "output" / "checkpoints"
 
+
     @staticmethod
     def _get_dataset_dir(env: EnvEnum, root_dir: Path) -> Path:
         if env == EnvEnum.COLAB:
@@ -315,6 +317,7 @@ class ConfigFactory:
         root_dir = ConfigFactory._get_root_dir(env)
         output_dir = ConfigFactory._get_output_dir(env, exp, root_dir)
         checkpoint_dir = ConfigFactory._get_checkpoint_dir(env, root_dir)
+        checkpoint_out_dir = Path("/tmp") if env == EnvEnum.KAGGLE else checkpoint_dir
         dataset_dir = ConfigFactory._get_dataset_dir(env, root_dir)
         input_dir = ConfigFactory._get_input_dir(env, root_dir)
         additional_train_dir = ConfigFactory._get_additional_train_dir(env, root_dir)
@@ -330,6 +333,7 @@ class ConfigFactory:
             input_dir=input_dir,
             output_dir=output_dir,
             checkpoint_dir=checkpoint_dir,
+            checkpoint_out_dir=checkpoint_out_dir,
             dataset_dir=dataset_dir,
             data_dir=data_dir,
             s_data_dir=s_data_dir,

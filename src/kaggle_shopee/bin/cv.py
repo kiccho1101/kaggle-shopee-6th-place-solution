@@ -45,7 +45,7 @@ for fold in range(config.cv_config.n_splits):
     )
     checkpoint_path = f"{args.exp}_{fold}" + "_{epoch:02d}_{threshold}_{valid_f1:.4f}"
     checkpoint_callback = callbacks.ModelCheckpoint(
-        dirpath=str(config.dir_config.checkpoint_dir),
+        dirpath=str(config.dir_config.checkpoint_out_dir),
         filename=checkpoint_path,
         save_top_k=1,
         monitor="valid_f1",

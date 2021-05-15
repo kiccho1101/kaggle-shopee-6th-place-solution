@@ -33,7 +33,7 @@ train_dataloader, valid_dataloader = DataLoaderFactory.get_train_dataloaders(
 )
 checkpoint_path = f"{args.exp}_-1" + "_{epoch:02d}"
 checkpoint_callback = callbacks.ModelCheckpoint(
-    dirpath=str(config.dir_config.checkpoint_dir),
+    dirpath=str(config.dir_config.checkpoint_out_dir),
     filename=checkpoint_path,
     save_top_k=-1,
     verbose=True,
@@ -53,7 +53,7 @@ trainer.fit(model, train_dataloader)
 last_epoch = config.train_config.epochs - 1
 last_epoch_str = str(last_epoch).zfill(2)
 checkpoint_path = str(
-    config.dir_config.checkpoint_dir / f"{args.exp}_-1_epoch{last_epoch_str}.ckpt"
+    config.dir_config.checkpoint_out_dir / f"{args.exp}_-1_epoch{last_epoch_str}.ckpt"
 )
 print("checkpoint_path", checkpoint_path)
 trainer.save_checkpoint(checkpoint_path)
