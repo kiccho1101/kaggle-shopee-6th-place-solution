@@ -12,3 +12,22 @@
 ### Ensemble
 
 ![ensemble.jpeg](./appendix/ensemble.jpeg)
+
+## Setup & Reproduce the results
+
+### Install packages
+
+```sh
+pipenv install --skip-lock --dev
+```
+
+### Download the dataset
+
+- Download the dataset from the [competition page](https://www.kaggle.com/c/shopee-product-matching/data) and place it in the `./input` directory
+
+### Run train.py
+
+```sh
+python train.py --env local --exp exp470
+python train.py --env local --exp exp471
+```

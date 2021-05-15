@@ -23,7 +23,7 @@ jobs:
         run: pip install kaggle
 
       - name: cp source
-        run: cp -r ./src ./data/kaggle-shopee/
+        run: cp -r ./src ./input/kaggle-shopee/
 
       - name: Upload to kaggle
         env:
