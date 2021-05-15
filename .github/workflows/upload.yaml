@@ -29,4 +29,4 @@ jobs:
         env:
           KAGGLE_USERNAME: ${{ secrets.KaggleUsername }}
           KAGGLE_KEY: ${{ secrets.KaggleKey }}
-        run: kaggle datasets version -p ./data/kaggle-shopee -m "update" -d --dir-mode zip
+        run: kaggle datasets version -p ./input/kaggle-shopee -m "update" -d --dir-mode zip
