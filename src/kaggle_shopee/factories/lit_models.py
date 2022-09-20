@@ -881,24 +881,12 @@ class ShopeeLitModel(pl.LightningModule):
             f"----------- {self.config.exp} Fold {self.fold} Epoch {self.current_epoch} ------------"
         )
         print(f"----------- valid best f1 {score} threshold: {threshold} ------------")
-        if self.with_mlflow:
-            MlflowUtil.log_metric(f"v_{self.fold}", score, self.current_epoch)
-            if self.best_score < score:
-                self.best_score = score
-                MlflowUtil.log_metric(f"v_best_{self.fold}", self.best_score)
-                MlflowUtil.log_metric(
-                    f"v_best_th_{self.fold}", threshold, step=self.current_epoch
-                )
-                MlflowUtil.log_metric(
-                    f"v_best_ep_{self.fold}",
-                    self.current_epoch,
-                    step=self.current_epoch,
-                )
-                MlflowUtil.log_best_score_mean(self.config)
-        self.valid_df.to_csv(
-            self.config.dir_config.output_dir / f"valid_df_{self.fold}.csv",
-            index=False,
-        )
+        if self.best_score < score:
+            self.best_score = score
+            self.valid_df.to_csv(
+                self.config.dir_config.output_dir / f"valid_df_{self.fold}.csv",
+                index=False,
+            )
         print()
         return score, threshold
 
