@@ -34,8 +34,6 @@ data, config = Pp.main(data, config)
 # data, config = Fe.main(data, config)
 
 
-MlflowUtil.start_run(config.mlflow_config, config.exp, config.name, True)
-MlflowUtil.log_params_config(config)
 for fold in range(config.cv_config.n_splits):
     if fold not in args.folds:
         continue
@@ -53,7 +51,7 @@ for fold in range(config.cv_config.n_splits):
         verbose=True,
     )
     model = lit_models.ShopeeLitModel(
-        data=data, config=config, fold=fold, with_mlflow=True
+        data=data, config=config, fold=fold, with_mlflow=False
     )
     # resume_from_checkpoint = FileUtil.get_resume_from_checkpoint(args.env, config, fold)
     trainer = pl.Trainer(
