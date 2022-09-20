@@ -298,14 +298,14 @@ class ConfigFactory:
     @staticmethod
     def _get_additional_train_dir(env: EnvEnum, root_dir: Path) -> Path:
         if env == EnvEnum.COLAB:
-            return Path("/content/drive/MyDrive/kaggle-shopee/input/shopee-product-matching/train.csv")
+            return Path("/content/kaggle-shopee/input/shopee-product-matching/train.csv")
         else:
             return Path(".")
 
     @staticmethod
     def _get_train_fold_dir(env: EnvEnum, root_dir: Path) -> Path:
         if env == EnvEnum.COLAB:
-            return Path("/content/drive/MyDrive/kaggle-shopee/input/shopee-product-matching/train.csv")
+            return Path("/content/kaggle-shopee/input/shopee-product-matching/train.csv")
         elif env == EnvEnum.KAGGLE:
             return Path("/kaggle/input/shopee-product-matching/train.csv")
         else:
