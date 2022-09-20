@@ -55,12 +55,12 @@ for fold in range(config.cv_config.n_splits):
     model = lit_models.ShopeeLitModel(
         data=data, config=config, fold=fold, with_mlflow=True
     )
-    resume_from_checkpoint = FileUtil.get_resume_from_checkpoint(args.env, config, fold)
+    # resume_from_checkpoint = FileUtil.get_resume_from_checkpoint(args.env, config, fold)
     trainer = pl.Trainer(
         gpus=-1,
         max_epochs=config.train_config.epochs,
         checkpoint_callback=checkpoint_callback,
-        resume_from_checkpoint=resume_from_checkpoint,
+        # resume_from_checkpoint=resume_from_checkpoint,
         num_sanity_val_steps=0,
         progress_bar_refresh_rate=1,
     )
