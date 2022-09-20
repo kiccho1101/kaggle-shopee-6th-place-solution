@@ -881,9 +881,9 @@ class ShopeeLitModel(pl.LightningModule):
         print(f"----------- valid best f1 {score} threshold: {threshold} ------------")
         if self.best_score < score:
             self.best_score = score
-            self.valid_df.to_pickle(
-                self.config.dir_config.output_dir / f"valid_df_{self.fold}.pickle",
-            )
+        self.valid_df.to_pickle(
+            self.config.dir_config.output_dir / f"valid_df_{self.fold}_{self.current_epoch:02d}.pickle",
+        )
         print()
         return score, threshold
 
