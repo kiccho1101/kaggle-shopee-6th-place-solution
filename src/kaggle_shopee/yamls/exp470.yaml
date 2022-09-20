@@ -15,7 +15,7 @@ train_config:
   resume_from_exp: exp470
   train_batch_size: 16
   valid_batch_size: 32
-  epochs: 1
+  epochs: 10
   num_workers: 2
 
 inference_config:
