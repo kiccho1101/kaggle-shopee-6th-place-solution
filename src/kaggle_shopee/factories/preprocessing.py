@@ -114,6 +114,7 @@ class Pp:
             folds.split(data.train, None, data.train["label_group"])
         ):
             data.train.loc[valid_idx, "fold"] = fold
+        data.train["kurupical_fold"] = data.train["fold"]
         return data, config
 
     @staticmethod
