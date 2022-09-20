@@ -16,12 +16,10 @@ import torch.cuda
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim
-from kaggle_shopee.factories.config_factory import (Config, ConfigFactory,
-                                                    EnvEnum)
+from kaggle_shopee.factories.config_factory import Config, ConfigFactory, EnvEnum
 from kaggle_shopee.factories.data_factory import Data
 from kaggle_shopee.factories.loss_factory import LossFactory
-from kaggle_shopee.factories.metric_learning_factory import \
-    MetricLearningFactory
+from kaggle_shopee.factories.metric_learning_factory import MetricLearningFactory
 from kaggle_shopee.factories.model_factory import ModelFactory
 from kaggle_shopee.factories.optimizer_factory import OptimizerFactory
 from kaggle_shopee.factories.scheduler_factory import SchedulerFactory
@@ -883,9 +881,8 @@ class ShopeeLitModel(pl.LightningModule):
         print(f"----------- valid best f1 {score} threshold: {threshold} ------------")
         if self.best_score < score:
             self.best_score = score
-            self.valid_df.to_csv(
-                self.config.dir_config.output_dir / f"valid_df_{self.fold}.csv",
-                index=False,
+            self.valid_df.to_pickle(
+                self.config.dir_config.output_dir / f"valid_df_{self.fold}.pickle",
             )
         print()
         return score, threshold
