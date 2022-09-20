@@ -28,6 +28,6 @@ pipenv install --skip-lock --dev
 ### Run train.py
 
 ```sh
-python train.py --env local --exp exp470
-python train.py --env local --exp exp471
+python src/kaggle_shopee/bin/train.py --env local --exp exp470
+python src/kaggle_shopee/bin/train.py --env local --exp exp471
 ```
