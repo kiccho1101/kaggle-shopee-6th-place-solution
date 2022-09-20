@@ -895,10 +895,10 @@ class ShopeeLitModel(pl.LightningModule):
                     step=self.current_epoch,
                 )
                 MlflowUtil.log_best_score_mean(self.config)
-                self.valid_df.to_csv(
-                    self.config.dir_config.output_dir / f"valid_df_{self.fold}.csv",
-                    index=False,
-                )
+        self.valid_df.to_csv(
+            self.config.dir_config.output_dir / f"valid_df_{self.fold}.csv",
+            index=False,
+        )
         print()
         return score, threshold
 
