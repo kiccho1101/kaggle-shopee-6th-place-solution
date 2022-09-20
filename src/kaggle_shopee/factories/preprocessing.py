@@ -120,15 +120,15 @@ class Pp:
     @TimeUtil.timer_wrapper
     @TestUtil.test_data
     def kurupical_fold(data: Data, config: Config) -> Tuple[Data, Config]:
-        if config.env != EnvEnum.KAGGLE:
-            data.train = data.train.merge(
-                data.train_fold[["posting_id", "fold"]].rename(
-                    {"fold": "kurupical_fold"}, axis=1
-                ),
-                on="posting_id",
-            )
-        else:
-            data.train["kurupical_fold"] = data.train["fold"]
+        # if config.env != EnvEnum.KAGGLE:
+        #     data.train = data.train.merge(
+        #         data.train_fold[["posting_id", "fold"]].rename(
+        #             {"fold": "kurupical_fold"}, axis=1
+        #         ),
+        #         on="posting_id",
+        #     )
+        # else:
+        #     data.train["kurupical_fold"] = data.train["fold"]
         return data, config
 
     @staticmethod
