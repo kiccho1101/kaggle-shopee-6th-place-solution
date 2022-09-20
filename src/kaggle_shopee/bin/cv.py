@@ -62,7 +62,6 @@ for fold in range(config.cv_config.n_splits):
         # resume_from_checkpoint=resume_from_checkpoint,
         callbacks=[checkpoint_callback],
         num_sanity_val_steps=0,
-        progress_bar_refresh_rate=1,
     )
     trainer.fit(model, train_dataloader, valid_dataloader)
     del model
