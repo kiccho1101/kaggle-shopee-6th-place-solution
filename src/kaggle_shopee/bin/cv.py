@@ -59,8 +59,8 @@ for fold in range(config.cv_config.n_splits):
     trainer = pl.Trainer(
         gpus=-1,
         max_epochs=config.train_config.epochs,
-        checkpoint_callback=checkpoint_callback,
         # resume_from_checkpoint=resume_from_checkpoint,
+        callbacks=[checkpoint_callback],
         num_sanity_val_steps=0,
         progress_bar_refresh_rate=1,
     )
