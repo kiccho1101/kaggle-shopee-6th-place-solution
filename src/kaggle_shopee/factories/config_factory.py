@@ -256,6 +256,8 @@ class ConfigFactory:
     def _get_output_dir(env: EnvEnum, exp: str, root_dir: Path) -> Path:
         if env == EnvEnum.COLAB:
             return Path("/content/drive/MyDrive/kaggle-shopee/output") / exp
+        elif env == EnvEnum.KAGGLE:
+            return Path("/kaggle/output") / exp
         else:
             return root_dir / "output" / exp
 
@@ -338,7 +340,9 @@ class ConfigFactory:
             s_data_dir=s_data_dir,
             yamls_dir=root_dir / "src" / "kaggle_shopee" / "yamls"
             if env != EnvEnum.KAGGLE
-            else Path("/kaggle/working/kaggle-shopee-6th-place-solution/src/kaggle_shopee/yamls"),
+            else Path(
+                "/kaggle/working/kaggle-shopee-6th-place-solution/src/kaggle_shopee/yamls"
+            ),
             train_images_dir=data_dir / "train_images",
             test_images_dir=data_dir / "test_images",
             additional_train_dir=additional_train_dir,
